@@ -28,16 +28,14 @@
 #  index_users_on_reset_password_token  (reset_password_token) UNIQUE
 #  index_users_on_uid_and_provider      (uid,provider) UNIQUE
 #
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe User, type: :model do
   describe "正常系テスト" do
     context "名前、メールアドレス、パスワードがすべて入力されている時" do
+      let(:user) { build(:user) }
 
-      let(:user) {build(:user)}
-
-      it "ユーザー登録ができる"do
-
+      it "ユーザー登録ができる" do
         expect(user).to be_valid
       end
     end
@@ -45,55 +43,47 @@ RSpec.describe User, type: :model do
 
   describe "異常系テスト" do
     context "名前が入力されていない時" do
+      let(:user) { build(:user, name: nil) }
 
-      let(:user) {build(:user, name: nil)}
-
-      it "ユーザーが登録できない"do
-
+      it "ユーザーが登録できない" do
         expect(user).to be_invalid
         expect(user.errors.details[:name][0][:error]).to eq :blank
       end
     end
 
     context "emailが入力されていない時" do
-
-      let(:user) {build(:user, email: nil)}
+      let(:user) { build(:user, email: nil) }
 
       it "ユーザーが登録できない" do
-
         expect(user).to be_invalid
         expect(user.errors.details[:email][0][:error]).to eq :blank
       end
     end
 
     context "パスワードが入力されていない時" do
-
-      let(:user) {build(:user, password: nil)}
+      let(:user) { build(:user, password: nil) }
 
       it "ユーザーが登録できない" do
-
         expect(user).to be_invalid
         expect(user.errors.details[:password][0][:error]).to eq :blank
       end
     end
 
     context "同じ名前のユーザーが存在する時" do
-
-      let(:newuser) {build(:user, name: "foo")}
+      let(:newuser) { build(:user, name: "foo") }
 
       it "ユーザーが登録できない" do
-        olduser = create(:user, name: "foo")
+        create(:user, name: "foo")
         expect(newuser).to be_invalid
         expect(newuser.errors.details[:name][0][:error]).to eq :taken
       end
     end
 
     context "同じメールアドレスが使われている時" do
-
-      let(:newuser) {build(:user, email: "foo@example.com")}
+      let(:newuser) { build(:user, email: "foo@example.com") }
 
       it "ユーザーが登録できない" do
-        olduser = create(:user, email: "foo@example.com")
+        create(:user, email: "foo@example.com")
         expect(newuser).to be_invalid
         expect(newuser.errors.details[:email][0][:error]).to eq :taken
       end

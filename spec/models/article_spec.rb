@@ -22,8 +22,7 @@ require "rails_helper"
 RSpec.describe Article, type: :model do
   describe "正常系テスト" do
     context "タイトルと本文どちらも記入されている時" do
-
-      let(:article) {build(:article)}
+      let(:article) { build(:article) }
 
       it "記事が作成できる" do
         expect(article).to be_valid
@@ -33,8 +32,7 @@ RSpec.describe Article, type: :model do
 
   describe "異常系テスト" do
     context "タイトルが記入されていない時" do
-
-      let(:article) {build(:article ,title: nil)}
+      let(:article) { build(:article, title: nil) }
 
       it "記事が作成できない" do
         expect(article).to be_invalid
@@ -43,8 +41,7 @@ RSpec.describe Article, type: :model do
     end
 
     context "本文が記入されていない時" do
-
-      let(:article) {build(:article ,body: nil)}
+      let(:article) { build(:article, body: nil) }
 
       it "記事が作成されない" do
         expect(article).to be_invalid
@@ -53,10 +50,10 @@ RSpec.describe Article, type: :model do
     end
 
     context "同一ユーザーで同じタイトルの記事が存在する時" do
-      let(:user) {create(:user)}
-      let(:oldarticle) {create(:article ,title: sametitle, user: user)}
-      let(:newarticle) {build(:article, title: sametitle, user: user)}
-      let(:sametitle) {"foo"}
+      let(:user) { create(:user) }
+      let(:oldarticle) { create(:article, title: sametitle, user: user) }
+      let(:newarticle) { build(:article, title: sametitle, user: user) }
+      let(:sametitle) { "foo" }
 
       it "記事が作成されない" do
         user
@@ -64,7 +61,6 @@ RSpec.describe Article, type: :model do
         expect(newarticle).to be_invalid
         expect(newarticle.errors.details[:title][0][:error]).to eq :taken
       end
-
     end
   end
 end
